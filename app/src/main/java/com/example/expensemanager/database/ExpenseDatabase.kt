@@ -14,7 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [Tag::class, Trade::class], version = 3)
+@Database(entities = [Tag::class, Trade::class], version = 4)
 @TypeConverters(Converters::class)
 abstract class ExpenseDatabase : RoomDatabase() {
 

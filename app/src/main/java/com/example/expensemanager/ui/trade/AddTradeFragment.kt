@@ -52,6 +52,7 @@ class AddTradeFragment : Fragment() {
         txtDateTrade.text = SimpleDateFormat("dd/M/yyyy").format(date.time!!)
         val txtTagTrade =  root.txt_tag_trade
         val editTxtAmount = root.edit_txt_add_trade_amount
+        val editTxtLabel = root.edit_txt_add_trade_label
         val tradeTypeSpinner: Spinner = root.findViewById(R.id.spinner_trade_type)
         root.btn_select_date_trade.setOnClickListener {
             val c = Calendar.getInstance()
@@ -145,7 +146,8 @@ class AddTradeFragment : Fragment() {
                 }
                 else -> {
                     val amount: Double = editTxtAmount.text.toString().toDouble()
-                    var trade: Trade = Trade(0, amount, tag!!.id, date)
+                    val label: String = editTxtLabel.text.toString()
+                    var trade: Trade = Trade(0, label, amount, tag!!.id, date)
                     addTradeViewModel.insert(trade)
                     val action = AddTradeFragmentDirections.actionNavigationTradeToNavigationHome()
                     findNavController().navigate(action)

@@ -11,10 +11,11 @@ import java.sql.Date
         entity = Tag::class,
         parentColumns = arrayOf("id"),
         childColumns = arrayOf("tag_id"),
-        onDelete = ForeignKey.CASCADE
+        onDelete = ForeignKey.NO_ACTION
     )]
 )
 data class Trade(@PrimaryKey(autoGenerate = true) val id: Long,
+                 @ColumnInfo(name = "label") val label: String,
                  @ColumnInfo(name = "amount") val amount: Double,
                  @ColumnInfo(name = "tag_id") val tagId: Long,
                  @ColumnInfo(name = "date") val date: Date

@@ -32,8 +32,9 @@ class TradeAdapter internal constructor(
 
     override fun onBindViewHolder(holder: tradeViewHolder, position: Int) {
         val current = trades[position]
-        holder.tradeItemView.text = current.amount.toString() + "€ - " + current.tagLabel +
-                " - " + SimpleDateFormat("dd/M/yyyy").format(current.date.time!!)
+        holder.tradeItemView.text = current.tradeLabel + " " + current.amount.toString() + "€ " +
+                current.tagLabel + " " +
+                SimpleDateFormat("dd/M").format(current.date.time!!)
         holder.tradeDeleteButton.setOnClickListener {
             Log.d("tradeListAdapter : ", "delete me on position $position !")
             var newtrades = this.trades.toMutableList()

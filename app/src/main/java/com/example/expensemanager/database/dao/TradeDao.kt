@@ -25,13 +25,17 @@ interface TradeDao {
     fun getTradesByType(is_income: Boolean): LiveData<List<Trade>>
 
     @Query("SELECT Trade.id, Trade.amount, Trade.tag_id, Trade.date," +
+            "Trade.label as trade_label," +
             "Tag.label as tag_label, Tag.is_income from Trade " +
-            "INNER JOIN Tag ON Trade.tag_id = Tag.id ")
+            "INNER JOIN Tag ON Trade.tag_id = Tag.id " +
+            "ORDER BY Trade.date ASC")
     fun getTradesWithTag(): LiveData<List<TradeWithTag>>
 
-    @Query("SELECT Trade.id, Trade.amount, Trade.tag_id, Trade.date," +
+    @Query("SELECT Trade.id, Trade.amount, Trade.tag_id, Trade.date,"+
+            "Trade.label as trade_label," +
             "Tag.label as tag_label, Tag.is_income from Trade " +
             "INNER JOIN Tag ON Trade.tag_id = Tag.id WHERE tag_id " +
-            "IN(SELECT id FROM Tag WHERE is_income = :is_income)")
+            "IN(SELECT id FROM Tag WHERE is_income = :is_income) " +
+            "ORDER BY Trade.date ASC")
     fun getTradesWithTagByType(is_income: Boolean): LiveData<List<TradeWithTag>>
 }
