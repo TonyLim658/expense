@@ -1,0 +1,57 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+
+launcher/bin/
+_applicatonDCT/
+_resources/
+!.mvn/wrapper/maven-wrapper.jar
+
+.vscode/
+_certificats/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+/.recommenders/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# build
+buildapi/
+buildapp/
+
+/.metadata/
+*.log
+
+#h2 local data
+api/data/*
+
+#sonar local files
+target/sonar
+
+#log folders
+*/logs/

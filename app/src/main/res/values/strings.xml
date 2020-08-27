@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Expense Analyst</string>
+
+    <string name="title_home">Home</string>
+    <string name="title_home_description">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_dashboard_description">Dashboard</string>
+    <string name="title_data">Data</string>
+    <string name="title_data_description">Data</string>
+    <string name="title_tags">Tags</string>
+    <string name="title_tags_description">Manage your tags</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_settings_description">Settings</string>
+    <string name="title_add_trade">Add expense / income</string>
+    <string name="title_add_trade_description">Add an expense or an income</string>
+    <string name="title_add_tag_description">Add a tag</string>
+    <string name="title_trade">Income / Expenses</string>
+
+    <string name="text_income">Income</string>
+    <string name="text_expense">Expense</string>
+
+    <string name="btn_descriptor_back_home">Return back to home</string>
+    <string name="btn_descriptor_save_trade">Save the trade</string>
+    <string name="add_tag">Add tag</string>
+    <string name="hint_tag_label">Name of your tag...</string>
+    <string name="save">Save</string>
+    <string name="description_btn_delete_item">delete the item assigned</string>
+    <string name="select_a_tag">Select a tag</string>
+    <string name="note_headline">Note</string>
+    <string name="add_note">Add a note</string>
+
+    <string-array name="tag_type">
+        <item>@string/text_income</item>
+        <item>@string/text_expense</item>
+    </string-array>
+</resources>

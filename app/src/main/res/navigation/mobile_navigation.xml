@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.expensemanager.ui.home.HomeFragment"
+        android:label="@string/title_home_description"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_add_trade"
+            app:destination="@id/navigation_add_trade" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_trade"
+            app:destination="@id/navigation_trade" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.example.expensemanager.ui.dashboard.DashboardFragment"
+        android:label="@string/title_dashboard_description"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_data"
+        android:name="com.example.expensemanager.ui.data.DataFragment"
+        android:label="@string/title_data_description"
+        tools:layout="@layout/fragment_data" />
+
+    <fragment
+        android:id="@+id/navigation_tags"
+        android:name="com.example.expensemanager.ui.tags.TagsFragment"
+        android:label="@string/title_tags_description"
+        tools:layout="@layout/fragment_tags" >
+        <action
+            android:id="@+id/action_navigation_tags_to_navigation_add_tag"
+            app:destination="@id/navigation_add_tag" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_add_tag"
+        android:name="com.example.expensemanager.ui.tags.AddTagFragment"
+        android:label="@string/title_add_tag_description"
+        tools:layout="@layout/fragment_add_tag" >
+        <action
+            android:id="@+id/action_navigation_add_tag_to_navigation_tags"
+            app:destination="@id/navigation_tags" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.example.expensemanager.ui.settings.SettingsFragment"
+        android:label="@string/title_settings_description"
+        tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/navigation_add_trade"
+        android:name="com.example.expensemanager.ui.trade.AddTradeFragment"
+        android:label="@string/title_add_trade"
+        tools:layout="@layout/fragment_add_trade" >
+        <action
+            android:id="@+id/action_navigation_trade_to_navigation_home"
+            app:destination="@id/navigation_home" />
+        <argument
+            android:name="isIncome"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_trade"
+        android:name="com.example.expensemanager.ui.trade.TradeFragment"
+        android:label="@string/title_trade"
+        tools:layout="@layout/fragment_trades" >
+        <action
+            android:id="@+id/action_navigation_trade_to_navigation_home2"
+            app:destination="@id/navigation_home" />
+        <argument android:name="isIncome"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
+
+</navigation>
