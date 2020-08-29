@@ -2,9 +2,7 @@ package com.example.expensemanager.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.expensemanager.database.entity.Tag
 import com.example.expensemanager.database.entity.Trade
-import com.example.expensemanager.database.entity.TradeWithTag
 
 @Dao
 interface TradeDao {
@@ -12,7 +10,10 @@ interface TradeDao {
     fun getAll(): LiveData<List<Trade>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(tag: Trade)
+    suspend fun insert(trade: Trade): Long
+
+    @Query("INSERT INTO Trade_Tag VALUES(:tradeId, :tagId)")
+    suspend fun joinTradeAndTag(tradeId: Long, tagId: Long)
 
     @Query("DELETE FROM Trade")
     suspend fun deleteAll()
@@ -20,22 +21,10 @@ interface TradeDao {
     @Query("DELETE FROM Trade WHERE id = :tradeId")
     suspend fun deleteById(tradeId: Long)
 
-    @Query("SELECT * FROM Trade WHERE tag_id " +
-            "IN(SELECT id FROM Tag WHERE is_income = :is_income)")
-    fun getTradesByType(is_income: Boolean): LiveData<List<Trade>>
-
-    @Query("SELECT Trade.id, Trade.amount, Trade.tag_id, Trade.date," +
-            "Trade.label as trade_label," +
-            "Tag.label as tag_label, Tag.is_income from Trade " +
-            "INNER JOIN Tag ON Trade.tag_id = Tag.id " +
-            "ORDER BY Trade.date ASC")
-    fun getTradesWithTag(): LiveData<List<TradeWithTag>>
-
-    @Query("SELECT Trade.id, Trade.amount, Trade.tag_id, Trade.date,"+
-            "Trade.label as trade_label," +
-            "Tag.label as tag_label, Tag.is_income from Trade " +
-            "INNER JOIN Tag ON Trade.tag_id = Tag.id WHERE tag_id " +
+    @Query("SELECT id, amount, date, label FROM Trade " +
+            "INNER JOIN Trade_Tag ON Trade.id = Trade_Tag.trade_id " +
+            "WHERE Trade_Tag.tag_id " +
             "IN(SELECT id FROM Tag WHERE is_income = :is_income) " +
             "ORDER BY Trade.date ASC")
-    fun getTradesWithTagByType(is_income: Boolean): LiveData<List<TradeWithTag>>
+    fun getTradesByType(is_income: Boolean): LiveData<List<Trade>>
 }

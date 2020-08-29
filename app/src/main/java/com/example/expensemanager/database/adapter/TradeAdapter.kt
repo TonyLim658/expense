@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.expensemanager.R
 import com.example.expensemanager.database.entity.Trade
-import com.example.expensemanager.database.entity.TradeWithTag
 import java.text.SimpleDateFormat
 
 class TradeAdapter internal constructor(
@@ -18,7 +17,7 @@ class TradeAdapter internal constructor(
 ) : RecyclerView.Adapter<TradeAdapter.tradeViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private var trades = emptyList<TradeWithTag>()
+    private var trades = emptyList<Trade>()
 
     inner class tradeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tradeItemView: TextView = itemView.findViewById(R.id.textView)
@@ -32,9 +31,8 @@ class TradeAdapter internal constructor(
 
     override fun onBindViewHolder(holder: tradeViewHolder, position: Int) {
         val current = trades[position]
-        holder.tradeItemView.text = current.tradeLabel + " " + current.amount.toString() + "€ " +
-                current.tagLabel + " " +
-                SimpleDateFormat("dd/M").format(current.date.time!!)
+        holder.tradeItemView.text = current.label + " " + current.amount.toString() +
+                "€ " + SimpleDateFormat("dd/M").format(current.date.time!!)
         holder.tradeDeleteButton.setOnClickListener {
             Log.d("tradeListAdapter : ", "delete me on position $position !")
             var newtrades = this.trades.toMutableList()
@@ -49,7 +47,7 @@ class TradeAdapter internal constructor(
         }
     }
 
-    internal fun setTrades(trades: List<TradeWithTag>) {
+    internal fun setTrades(trades: List<Trade>) {
         this.trades = trades
         notifyDataSetChanged()
     }
@@ -57,6 +55,6 @@ class TradeAdapter internal constructor(
     override fun getItemCount() = trades.size
 
     class DeleteTradeListener(val clickListener: (tradeId: Long) -> Unit) {
-        fun onClick(trade: TradeWithTag) = clickListener(trade.id)
+        fun onClick(trade: Trade) = clickListener(trade.id)
     }
 }

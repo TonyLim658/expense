@@ -10,11 +10,12 @@ import com.example.expensemanager.database.dao.TagDao
 import com.example.expensemanager.database.dao.TradeDao
 import com.example.expensemanager.database.entity.Tag
 import com.example.expensemanager.database.entity.Trade
+import com.example.expensemanager.database.entity.TradeTagJunction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [Tag::class, Trade::class], version = 4)
+@Database(entities = [Tag::class, Trade::class, TradeTagJunction::class], version = 5)
 @TypeConverters(Converters::class)
 abstract class ExpenseDatabase : RoomDatabase() {
 

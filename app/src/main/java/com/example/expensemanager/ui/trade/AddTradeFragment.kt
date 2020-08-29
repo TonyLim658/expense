@@ -93,10 +93,13 @@ class AddTradeFragment : Fragment() {
             builder
                 ?.setIcon(R.drawable.ic_loyalty_black_24dp)
                 ?.setTitle("Select One Name:")
+                    // TODO SET MULTIPLE TAG ITEM SELECTOR
                 ?.setAdapter(
                     arrayAdapter
                 ) { dialog, which ->
                     tag = arrayAdapter.getItem(which)
+/*
+
                     val builderInner =
                         AlertDialog.Builder(it.context)
                     builderInner.setMessage(tag?.label)
@@ -109,6 +112,7 @@ class AddTradeFragment : Fragment() {
                         txtTagTrade.text = tag?.label
                     }
                     builderInner.show()
+*/
                 }
 //                ?.setView(recyclerView)
                     /*
@@ -147,8 +151,8 @@ class AddTradeFragment : Fragment() {
                 else -> {
                     val amount: Double = editTxtAmount.text.toString().toDouble()
                     val label: String = editTxtLabel.text.toString()
-                    var trade: Trade = Trade(0, label, amount, tag!!.id, date)
-                    addTradeViewModel.insert(trade)
+                    var trade = Trade(0, label, amount, date)
+                    addTradeViewModel.insert(trade, tag!!)
                     val action = AddTradeFragmentDirections.actionNavigationTradeToNavigationHome()
                     findNavController().navigate(action)
                 }

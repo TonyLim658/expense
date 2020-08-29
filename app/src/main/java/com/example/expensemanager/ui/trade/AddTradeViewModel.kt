@@ -33,7 +33,7 @@ class AddTradeViewModel(application: Application) : AndroidViewModel(application
         return tagRepository.getTagByType(is_income)
     }
 
-    fun insert(trade: Trade) = viewModelScope.launch(Dispatchers.IO) {
-        tradeRepository.insert(trade)
+    fun insert(trade: Trade, tag: Tag) = viewModelScope.launch(Dispatchers.IO) {
+        tradeRepository.insert(trade, tag)
     }
 }

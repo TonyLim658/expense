@@ -1,9 +1,6 @@
 package com.example.expensemanager.database.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 import java.sql.Date
 
 data class TradeWithTag(val id: Long,

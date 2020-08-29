@@ -33,7 +33,7 @@ class TradeFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this.context)
 
-        tradeViewModel.getTradesWithTagByType(isIncome).observe(viewLifecycleOwner, Observer { words ->
+        tradeViewModel.getTradesByType(isIncome).observe(viewLifecycleOwner, Observer { words ->
             words?.let { adapter?.setTrades(it) }
         })
         return root
