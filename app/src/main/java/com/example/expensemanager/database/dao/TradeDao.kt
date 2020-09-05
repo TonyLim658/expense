@@ -25,6 +25,7 @@ interface TradeDao {
             "INNER JOIN Trade_Tag ON Trade.id = Trade_Tag.trade_id " +
             "WHERE Trade_Tag.tag_id " +
             "IN(SELECT id FROM Tag WHERE is_income = :is_income) " +
-            "ORDER BY Trade.date ASC")
+            "GROUP BY id " +
+            "ORDER BY Trade.date ASC ")
     fun getTradesByType(is_income: Boolean): LiveData<List<Trade>>
 }

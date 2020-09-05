@@ -29,11 +29,15 @@ class AddTradeViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun getTagsByType(is_income: Boolean): LiveData<List<Tag>> {
-        Log.d("TradeViewModel : ", "Get tag by income is $is_income")
+        Log.d("AddTradeViewModel : ", "Get tag by income is $is_income")
         return tagRepository.getTagByType(is_income)
     }
 
     fun insert(trade: Trade, tag: Tag) = viewModelScope.launch(Dispatchers.IO) {
         tradeRepository.insert(trade, tag)
+    }
+
+    fun insertWithTags(trade: Trade, tags: ArrayList<Tag>) = viewModelScope.launch(Dispatchers.IO) {
+        tradeRepository.insertWithTags(trade, tags)
     }
 }

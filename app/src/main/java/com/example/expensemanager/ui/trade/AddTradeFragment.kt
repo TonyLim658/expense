@@ -13,25 +13,25 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Observer
-import androidx.navigation.NavArgsLazy
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.expensemanager.R
 import com.example.expensemanager.database.entity.Tag
 import com.example.expensemanager.database.entity.Trade
 import kotlinx.android.synthetic.main.fragment_add_trade.view.*
+import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*
-import java.sql.Date
+import kotlin.collections.ArrayList
 
 class AddTradeFragment : Fragment() {
 
     private lateinit var addTradeViewModel: AddTradeViewModel
     private val args: AddTradeFragmentArgs by navArgs()
     private var date: Date = Date(Calendar.getInstance().time.time)
-    private var tag: Tag? = null
+    private var tagsChecked: ArrayList<Tag> = arrayListOf()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -71,7 +71,7 @@ class AddTradeFragment : Fragment() {
             }
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 txtTagTrade.text = "Select a tag"
-                tag = null
+                tagsChecked = arrayListOf()
             }
         }
         root.btn_back_home.setOnClickListener {
@@ -79,66 +79,68 @@ class AddTradeFragment : Fragment() {
             findNavController().navigate(action)
         }
         root.btn_select_tag.setOnClickListener {
-            arrayAdapter.clear()
+            txtTagTrade.text = "Select a tag"
+            tagsChecked = arrayListOf()
+            val tagsTempList: ArrayList<Tag> = ArrayList()
+            val tagsLabelList: ArrayList<String> = ArrayList()
             addTradeViewModel.getTagsByType(tradeTypeSpinner.selectedItem.toString() == "Income")
                 .observe(viewLifecycleOwner, Observer { tags ->
                     tags?.stream()?.forEach { tag ->
-                        arrayAdapter.add(tag)
+                        tagsTempList.add(tag)
+                        tagsLabelList.add(tag.label)
                     }
+                    val builder: AlertDialog.Builder? = activity?.let {
+                        AlertDialog.Builder(it)
+                    }
+                    val checkedItem: BooleanArray = BooleanArray(tagsLabelList.size)
+                    for(i in tagsLabelList.indices) {
+                        checkedItem[i] = false
+                    }
+                    builder
+                        ?.setIcon(R.drawable.ic_loyalty_black_24dp)
+                        ?.setTitle("Select One Name:")
+                        ?.setMultiChoiceItems(tagsLabelList.toList().toTypedArray(), checkedItem,
+                            DialogInterface.OnMultiChoiceClickListener() {
+                                    dialogInterface: DialogInterface, i: Int, b: Boolean ->
+                            })
+                        ?.setPositiveButton(
+                            "OK"
+                        ) { dialog, which -> // Do something when click positive button
+                            Log.d("AddTradeFragment", "Your preferred colors.....")
+                            var colors = ""
+                            for (i in checkedItem.indices) {
+                                val checked: Boolean = checkedItem[i]
+                                if (checked) {
+                                    if (tagsChecked.isNotEmpty()) {
+                                        colors = "$colors, "
+                                    }
+                                    colors += tagsLabelList[i]
+                                    tagsChecked.add(tagsTempList[i])
+                                }
+                            }
+                            txtTagTrade.text = colors
+                            Log.d("AddTradeFragment", "colors = " + colors)
+                        }
+                        ?.setNegativeButton("Cancel",
+                            DialogInterface.OnClickListener { dialog, id ->
+                                dialog.dismiss()
+                            })
+                    // Create the AlertDialog object and return it
+                    builder?.create()?.show()
+
+                    val builderSingle: AlertDialog.Builder? = activity?.let {
+                        AlertDialog.Builder(it)
+                    }
+                    builderSingle?.setIcon(R.drawable.ic_loyalty_black_24dp)
+                    builderSingle?.setTitle("Select One Name:")
                 })
 
-            val builder: AlertDialog.Builder? = activity?.let {
-                AlertDialog.Builder(it)
-            }
-            builder
-                ?.setIcon(R.drawable.ic_loyalty_black_24dp)
-                ?.setTitle("Select One Name:")
-                    // TODO SET MULTIPLE TAG ITEM SELECTOR
-                ?.setAdapter(
-                    arrayAdapter
-                ) { dialog, which ->
-                    tag = arrayAdapter.getItem(which)
-/*
-
-                    val builderInner =
-                        AlertDialog.Builder(it.context)
-                    builderInner.setMessage(tag?.label)
-                    builderInner.setTitle("Your Selected Item is")
-                    builderInner.setPositiveButton(
-                        "Ok"
-                    )
-                    { dialog, which ->
-                        dialog.dismiss()
-                        txtTagTrade.text = tag?.label
-                    }
-                    builderInner.show()
-*/
-                }
-//                ?.setView(recyclerView)
-                    /*
-                ?.setPositiveButton("R.string.fire",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        // FIRE ZE MISSILES!
-                    })
-                    */
-                ?.setNegativeButton("Cancel",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        dialog.dismiss()
-                    })
-            // Create the AlertDialog object and return it
-            builder?.create()?.show()
-
-            val builderSingle: AlertDialog.Builder? = activity?.let {
-                AlertDialog.Builder(it)
-            }
-            builderSingle?.setIcon(R.drawable.ic_loyalty_black_24dp)
-            builderSingle?.setTitle("Select One Name:")
         }
 
         root.btn_save_trade2.setOnClickListener {
             val toast = Toast.makeText(it.context, "", Toast.LENGTH_SHORT)
             when {
-                tag == null -> {
+                tagsChecked.isEmpty() -> {
                     toast.setText("Please select a tag")
                     toast.show()
                     Log.d("TradeFragment", "Tag not selected")
@@ -152,7 +154,7 @@ class AddTradeFragment : Fragment() {
                     val amount: Double = editTxtAmount.text.toString().toDouble()
                     val label: String = editTxtLabel.text.toString()
                     var trade = Trade(0, label, amount, date)
-                    addTradeViewModel.insert(trade, tag!!)
+                    addTradeViewModel.insertWithTags(trade, tagsChecked)
                     val action = AddTradeFragmentDirections.actionNavigationTradeToNavigationHome()
                     findNavController().navigate(action)
                 }

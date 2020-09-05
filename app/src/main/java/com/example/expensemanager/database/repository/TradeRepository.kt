@@ -17,6 +17,16 @@ class TradeRepository (private val tradeDao: TradeDao) {
     suspend fun insert(trade: Trade, tag: Tag) {
         val tradeId = tradeDao.insert(trade)
         tradeDao.joinTradeAndTag(tradeId, tag.id)
+        Log.d("TradeRepo : ", trade.label + " joined with " + tag.label)
+    }
+
+    suspend fun insertWithTags(trade: Trade, tags: ArrayList<Tag>) {
+        val tradeId = tradeDao.insert(trade)
+        tags.forEach { tag ->
+            tradeDao.joinTradeAndTag(tradeId, tag.id)
+            Log.d("TradeRepo : ", trade.label + "(" + tradeId + ")" +
+                    " joined with " + tag.label)
+        }
     }
 
     suspend fun deleteById(tradeId: Long) {
