@@ -2,6 +2,7 @@ package com.example.expensemanager.ui.home
 
 import android.content.ClipData
 import android.content.ClipDescription
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.DragEvent
@@ -13,6 +14,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.expensemanager.R
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.utils.ColorTemplate
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
 
@@ -31,13 +36,75 @@ class HomeFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         val incomeLayout = root.incomeLayout
         val expenseLayout = root.expenseLayout
+        val pieChartViewIncome = root.pieChartViewIncome
+        val pieChartViewExpense = root.pieChartViewExpense
+        val txtIncomeValue = root.txt_income_value
+        val txtExpenseValue = root.txt_expense_value
+        var totalIncome = 0.0
+        var totalExpense = 0.0
 
-        root.btn_add_income.setOnClickListener {
+        // TODO encapsuler le code data
+        val count = 4
+        val entries1: ArrayList<PieEntry> = ArrayList()
+
+        for (i in 0 until count) {
+            val incomeGenerated = (Math.random() * 60 + 40).toFloat()
+            totalIncome += incomeGenerated
+            entries1.add(
+                PieEntry(
+                    incomeGenerated,
+                    "Tag " + (i + 1)
+                )
+            )
+        }
+        val ds1 = PieDataSet(entries1, "Income Chart")
+        ds1.setColors(*ColorTemplate.MATERIAL_COLORS)
+        ds1.valueTextColor = Color.BLACK
+        ds1.valueLineColor = Color.BLACK
+        ds1.valueTextSize = 12f
+
+        val d = PieData(ds1)
+        pieChartViewIncome.description.isEnabled = false
+        pieChartViewIncome.holeRadius = 45f
+        pieChartViewIncome.transparentCircleRadius = 50f
+        pieChartViewIncome.data = d
+        // TODO expense
+        val entries2: ArrayList<PieEntry> = ArrayList()
+
+        for (i in 0 until count) {
+            val expenseGenerated = (Math.random() * 60 + 40).toFloat()
+            totalExpense += expenseGenerated
+            entries2.add(
+                PieEntry(
+                    expenseGenerated,
+                    "Tag " + (i + 1)
+                )
+            )
+        }
+        val ds2 = PieDataSet(entries2, "Expense Chart")
+        ds2.setColors(*ColorTemplate.MATERIAL_COLORS)
+        ds2.valueTextColor = Color.BLACK
+        ds2.valueLineColor = Color.BLACK
+        ds2.valueTextSize = 12f
+
+        val d2 = PieData(ds2)
+        pieChartViewExpense.description.isEnabled = false
+        pieChartViewExpense.holeRadius = 45f
+        pieChartViewExpense.transparentCircleRadius = 50f
+        pieChartViewExpense.data = d2
+
+        // TODO encapsuler le code data
+        txtIncomeValue.text = String.format("%.2f", totalIncome) + "€ \n(" +
+                String.format("%.1f", 100 * totalIncome / (totalExpense + totalIncome)) + "%)"
+        txtExpenseValue.text = String.format("%.2f", totalExpense) + "€ \n(" +
+                String.format("%.1f", 100 * totalExpense / (totalExpense + totalIncome)) + "%)"
+
+        root.incomeLayout.setOnClickListener {
             val action = HomeFragmentDirections.actionNavigationHomeToNavigationTrade(true)
             findNavController().navigate(action)
         }
 
-        root.btn_add_expense.setOnClickListener {
+        root.expenseLayout.setOnClickListener {
             val action = HomeFragmentDirections.actionNavigationHomeToNavigationTrade(false)
             findNavController().navigate(action)
         }
