@@ -11,9 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.expensemanager.R
+import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -31,8 +33,7 @@ class HomeFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
 
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         val incomeLayout = root.incomeLayout
         val expenseLayout = root.expenseLayout
@@ -43,61 +44,45 @@ class HomeFragment : Fragment() {
         var totalIncome = 0.0
         var totalExpense = 0.0
 
-        // TODO encapsuler le code data
-        val count = 4
-        val entries1: ArrayList<PieEntry> = ArrayList()
+        homeViewModel.getTradesByType(true).observe(viewLifecycleOwner, Observer { trades ->
+            trades?.stream()?.forEach { trade ->
+                totalIncome += trade.amount
+            }
+            if (totalIncome == null || totalIncome!! == 0.0) {
+                txtIncomeValue.text = "0€ \n(0%)"
+            } else {
+                txtIncomeValue.text = String.format("%.2f", totalIncome!!) + "€ \n(" +
+                        String.format("%.1f", 100 * totalIncome!! / (totalExpense!! + totalIncome!!)) + "%)"
+            }
 
-        for (i in 0 until count) {
-            val incomeGenerated = (Math.random() * 60 + 40).toFloat()
-            totalIncome += incomeGenerated
-            entries1.add(
-                PieEntry(
-                    incomeGenerated,
-                    "Tag " + (i + 1)
-                )
-            )
-        }
-        val ds1 = PieDataSet(entries1, "Income Chart")
-        ds1.setColors(*ColorTemplate.MATERIAL_COLORS)
-        ds1.valueTextColor = Color.BLACK
-        ds1.valueLineColor = Color.BLACK
-        ds1.valueTextSize = 12f
+            if (totalExpense == null || totalExpense!! == 0.0) {
+                txtExpenseValue.text = "0€ \n(0%)"
+            } else {
+                txtExpenseValue.text = String.format("%.2f", totalExpense!!) + "€ \n(" +
+                        String.format("%.1f", 100 * totalExpense!! / (totalExpense!! + totalIncome!!)) + "%)"
+            }
+        })
+        homeViewModel.getTradesByType(false).observe(viewLifecycleOwner, Observer { trades ->
+            trades?.stream()?.forEach { trade ->
+                totalExpense += trade.amount
+            }
+            if (totalIncome == null || totalIncome!! == 0.0) {
+                txtIncomeValue.text = "0€ \n(0%)"
+            } else {
+                txtIncomeValue.text = String.format("%.2f", totalIncome!!) + "€ \n(" +
+                        String.format("%.1f", 100 * totalIncome!! / (totalExpense!! + totalIncome!!)) + "%)"
+            }
 
-        val d = PieData(ds1)
-        pieChartViewIncome.description.isEnabled = false
-        pieChartViewIncome.holeRadius = 45f
-        pieChartViewIncome.transparentCircleRadius = 50f
-        pieChartViewIncome.data = d
-        // TODO expense
-        val entries2: ArrayList<PieEntry> = ArrayList()
+            if (totalExpense == null || totalExpense!! == 0.0) {
+                txtExpenseValue.text = "0€ \n(0%)"
+            } else {
+                txtExpenseValue.text = String.format("%.2f", totalExpense!!) + "€ \n(" +
+                        String.format("%.1f", 100 * totalExpense!! / (totalExpense!! + totalIncome!!)) + "%)"
+            }
+        })
 
-        for (i in 0 until count) {
-            val expenseGenerated = (Math.random() * 60 + 40).toFloat()
-            totalExpense += expenseGenerated
-            entries2.add(
-                PieEntry(
-                    expenseGenerated,
-                    "Tag " + (i + 1)
-                )
-            )
-        }
-        val ds2 = PieDataSet(entries2, "Expense Chart")
-        ds2.setColors(*ColorTemplate.MATERIAL_COLORS)
-        ds2.valueTextColor = Color.BLACK
-        ds2.valueLineColor = Color.BLACK
-        ds2.valueTextSize = 12f
-
-        val d2 = PieData(ds2)
-        pieChartViewExpense.description.isEnabled = false
-        pieChartViewExpense.holeRadius = 45f
-        pieChartViewExpense.transparentCircleRadius = 50f
-        pieChartViewExpense.data = d2
-
-        // TODO encapsuler le code data
-        txtIncomeValue.text = String.format("%.2f", totalIncome) + "€ \n(" +
-                String.format("%.1f", 100 * totalIncome / (totalExpense + totalIncome)) + "%)"
-        txtExpenseValue.text = String.format("%.2f", totalExpense) + "€ \n(" +
-                String.format("%.1f", 100 * totalExpense / (totalExpense + totalIncome)) + "%)"
+        generatePieChart(true, pieChartViewIncome)
+        generatePieChart(false, pieChartViewExpense)
 
         root.incomeLayout.setOnClickListener {
             val action = HomeFragmentDirections.actionNavigationHomeToNavigationTrade(true)
@@ -282,4 +267,34 @@ class HomeFragment : Fragment() {
         return root
     }
 
+    private fun generatePieChart(
+        isIncome: Boolean,
+        pieChartView: PieChart
+    ) {
+        homeViewModel.getTagWithSumAmount(isIncome)
+            .observe(viewLifecycleOwner, Observer { tags ->
+                val entries: ArrayList<PieEntry> = ArrayList()
+                tags?.stream()?.forEach { tag ->
+                    entries.add(
+                        PieEntry(
+                            tag.sum_amount.toFloat(),
+                            tag.label
+                        )
+                    )
+                }
+                val ds = PieDataSet(entries, "Chart")
+                ds.setColors(*ColorTemplate.MATERIAL_COLORS)
+                ds.valueTextColor = Color.BLACK
+                ds.valueLineColor = Color.BLACK
+                ds.valueTextSize = 12f
+
+                val d = PieData(ds)
+                pieChartView.description.isEnabled = false
+                pieChartView.holeRadius = 45f
+                pieChartView.transparentCircleRadius = 50f
+                pieChartView.data = d
+                pieChartView.notifyDataSetChanged()
+                pieChartView.invalidate()
+            })
+    }
 }

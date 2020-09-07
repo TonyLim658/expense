@@ -7,6 +7,7 @@ import androidx.room.Dao
 import com.example.expensemanager.database.entity.Tag
 import com.example.expensemanager.database.repository.TagRepository
 import com.example.expensemanager.database.ExpenseDatabase
+import com.example.expensemanager.database.entity.TagWithAmount
 import com.example.expensemanager.database.entity.Trade
 import com.example.expensemanager.database.repository.TradeRepository
 import kotlinx.coroutines.Dispatchers

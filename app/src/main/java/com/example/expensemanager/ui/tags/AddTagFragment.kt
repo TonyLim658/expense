@@ -49,7 +49,7 @@ class AddTagFragment : Fragment(), AdapterView.OnItemSelectedListener {
         root.btn_add_tag.setOnClickListener {
             var IS_INCOME: Boolean = tagSpinner.selectedItem.toString() == INCOME_TEXT
             Log.d("AddTagFragment", tagSpinner.selectedItem.toString())
-            var t: Tag = Tag(0, editTagLabelView.text.toString(), IS_INCOME)
+            var t: Tag = Tag(0, editTagLabelView.text.toString(), "", IS_INCOME)
             addTagViewModel.insert(t)
             val action = AddTagFragmentDirections.actionNavigationAddTagToNavigationTags()
             findNavController().navigate(action)

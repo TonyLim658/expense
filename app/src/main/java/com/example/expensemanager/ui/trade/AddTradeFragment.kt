@@ -153,7 +153,7 @@ class AddTradeFragment : Fragment() {
                 else -> {
                     val amount: Double = editTxtAmount.text.toString().toDouble()
                     val label: String = editTxtLabel.text.toString()
-                    var trade = Trade(0, label, amount, date)
+                    var trade = Trade(0, label, "", amount, date)
                     addTradeViewModel.insertWithTags(trade, tagsChecked)
                     val action = AddTradeFragmentDirections.actionNavigationTradeToNavigationHome()
                     findNavController().navigate(action)

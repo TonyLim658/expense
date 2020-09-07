@@ -3,6 +3,7 @@ package com.example.expensemanager.database.repository
 import androidx.lifecycle.LiveData
 import com.example.expensemanager.database.dao.TagDao
 import com.example.expensemanager.database.entity.Tag
+import com.example.expensemanager.database.entity.TagWithAmount
 
 // Declares the DAO as a private property in the constructor. Pass in the DAO
 // instead of the whole database, because you only need access to the DAO
@@ -22,5 +23,9 @@ class TagRepository (private val tagDao: TagDao) {
 
     fun getTagByType(is_income: Boolean): LiveData<List<Tag>> {
         return tagDao.getTagByType(is_income)
+    }
+
+    fun getTagWithSumAmount(is_income: Boolean): LiveData<List<TagWithAmount>> {
+        return tagDao.getTagWithSumAmount(is_income)
     }
 }

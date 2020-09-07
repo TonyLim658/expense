@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.expensemanager.database.dao.TradeDao
 import com.example.expensemanager.database.entity.Tag
+import com.example.expensemanager.database.entity.TagWithAmount
 import com.example.expensemanager.database.entity.Trade
 
 class TradeRepository (private val tradeDao: TradeDao) {
@@ -35,5 +36,16 @@ class TradeRepository (private val tradeDao: TradeDao) {
 
     fun getAllTradesByType(isIncome: Boolean): LiveData<List<Trade>> {
         return tradeDao.getTradesByType(isIncome)
+    }
+
+    fun getTotalAmountOfType(is_income: Boolean): Double {
+        val trades = getAllTradesByType(is_income).value
+        var total = 0.0
+        if (trades != null) {
+            for (trade in trades) {
+                total += trade.amount
+            }
+        }
+        return total
     }
 }

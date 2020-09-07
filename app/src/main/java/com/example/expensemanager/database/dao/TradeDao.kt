@@ -21,7 +21,7 @@ interface TradeDao {
     @Query("DELETE FROM Trade WHERE id = :tradeId")
     suspend fun deleteById(tradeId: Long)
 
-    @Query("SELECT id, amount, date, label FROM Trade " +
+    @Query("SELECT * FROM Trade " +
             "INNER JOIN Trade_Tag ON Trade.id = Trade_Tag.trade_id " +
             "WHERE Trade_Tag.tag_id " +
             "IN(SELECT id FROM Tag WHERE is_income = :is_income) " +

@@ -15,7 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [Tag::class, Trade::class, TradeTagJunction::class], version = 5)
+@Database(entities = [Tag::class, Trade::class, TradeTagJunction::class], version = 6)
 @TypeConverters(Converters::class)
 abstract class ExpenseDatabase : RoomDatabase() {
 
@@ -74,13 +74,13 @@ abstract class ExpenseDatabase : RoomDatabase() {
             tagDao.deleteAll()
             tradeDao.deleteAll()
 
-            var tag = Tag(0, "Other", true)
+            var tag = Tag(0, "Other", "", true)
             tagDao.insert(tag)
-            tag = Tag(0, "Food", false)
+            tag = Tag(0, "Food", "", false)
             tagDao.insert(tag)
-            tag = Tag(0, "Rent", false)
+            tag = Tag(0, "Rent", "", false)
             tagDao.insert(tag)
-            tag = Tag(0, "Salary", true)
+            tag = Tag(0, "Salary", "", true)
             tagDao.insert(tag)
         }
     }

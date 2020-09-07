@@ -14,12 +14,10 @@ import kotlinx.coroutines.launch
 class TradeViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: TradeRepository
-    val allTrades: LiveData<List<Trade>>
 
     init {
         val tradesDao = ExpenseDatabase.getDatabase(application, viewModelScope).tradeDao()
         repository = TradeRepository(tradesDao)
-        allTrades = repository.allTrades
     }
 
     fun getTradesByType(isIncome: Boolean): LiveData<List<Trade>> {
