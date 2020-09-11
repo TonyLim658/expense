@@ -1,12 +1,15 @@
 package com.example.expensemanager.database.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.expensemanager.R
 import com.example.expensemanager.database.entity.Tag
@@ -19,6 +22,7 @@ class TagAdapter internal constructor(
     private var tags = emptyList<Tag>() // Cached copy of words
 
     inner class TagViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val layout: ConstraintLayout = itemView.findViewById(R.id.linearLayoutTagRecycler)
         val tagItemView: TextView = itemView.findViewById(R.id.textView)
         val tagDeleteButton: ImageButton = itemView.findViewById(R.id.btn_delete_item)
     }
@@ -31,6 +35,10 @@ class TagAdapter internal constructor(
     override fun onBindViewHolder(holder: TagViewHolder, position: Int) {
         val current = tags[position]
         holder.tagItemView.text = current.label
+        holder.layout.setBackgroundColor(if(position % 2 == 1) Color.LTGRAY else Color.WHITE)
+        holder.tagItemView.setTextColor(if(current.is_income)
+            Color.parseColor("#0F9D58") else Color.parseColor("#DB4437"))
+
         holder.tagDeleteButton.setOnClickListener {
             Log.d("TagListAdapter : ", "delete me on position $position !")
             var newTags = this.tags.toMutableList()

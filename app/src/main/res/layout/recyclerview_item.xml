@@ -2,8 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout4"
-    android:background="@android:color/holo_orange_light"
+    android:id="@+id/linearLayoutTagRecycler"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -12,6 +11,7 @@
         style="@style/word_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@color/transparency"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -20,6 +20,7 @@
         android:id="@+id/btn-delete-item"
         android:layout_width="@android:dimen/app_icon_size"
         android:layout_height="@android:dimen/app_icon_size"
+        android:background="@color/transparency"
         android:contentDescription="@string/description_btn_delete_item"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

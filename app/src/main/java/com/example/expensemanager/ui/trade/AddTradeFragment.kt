@@ -52,7 +52,7 @@ class AddTradeFragment : Fragment() {
         val txtTagTrade =  root.txt_tag_trade
         val editTxtAmount = root.edit_txt_add_trade_amount
         val editTxtLabel = root.edit_txt_add_trade_label
-        val editTxtNote: EditText = root.edit_txt_note
+        val editTxtNote = root.edit_txt_note
         val tradeTypeSpinner: Spinner = root.findViewById(R.id.spinner_trade_type)
         root.btn_select_date_trade.setOnClickListener {
             val c = Calendar.getInstance()
@@ -143,6 +143,10 @@ class AddTradeFragment : Fragment() {
 
         root.btn_save_trade2.setOnClickListener {
             val toast = Toast.makeText(it.context, "", Toast.LENGTH_SHORT)
+            editTxtLabel.background.setTint(
+                if (editTxtLabel.text.toString().isNullOrBlank()) Color.RED else Color.BLACK)
+            editTxtAmount.background.setTint(
+                if (editTxtAmount.text.toString().isNullOrBlank()) Color.RED else Color.BLACK)
             when {
                 tagsChecked.isEmpty() -> {
                     toast.setText("Please select a tag")
@@ -161,7 +165,7 @@ class AddTradeFragment : Fragment() {
                 }
                 else -> {
                     val amount: Double = editTxtAmount.text.toString().toDouble()
-                    val label: String = editTxtLabel.text.toString()
+                    val label: String = editTxtLabel.text.toString().trim()
                     val note: String = editTxtNote.text.toString()
                     var trade = Trade(0, label, note, amount, date)
                     addTradeViewModel.insertWithTags(trade, tagsChecked)
@@ -170,12 +174,6 @@ class AddTradeFragment : Fragment() {
                 }
             }
         }
-        /*
-        root.btn_add_note.setOnClickListener {
-            val action = AddTradeFragmentDirections.actionNavigationAddTradeToNavigationAddNote()
-            findNavController().navigate(action)
-        }
-        */
 
         return root
     }

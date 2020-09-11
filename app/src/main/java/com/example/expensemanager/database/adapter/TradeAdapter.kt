@@ -1,12 +1,14 @@
 package com.example.expensemanager.database.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.expensemanager.R
 import com.example.expensemanager.database.entity.Trade
@@ -20,6 +22,7 @@ class TradeAdapter internal constructor(
     private var trades = emptyList<Trade>()
 
     inner class tradeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val layout: ConstraintLayout = itemView.findViewById(R.id.linearLayoutTagRecycler)
         val tradeItemView: TextView = itemView.findViewById(R.id.textView)
         val tradeDeleteButton: ImageButton = itemView.findViewById(R.id.btn_delete_item)
     }
@@ -31,6 +34,7 @@ class TradeAdapter internal constructor(
 
     override fun onBindViewHolder(holder: tradeViewHolder, position: Int) {
         val current = trades[position]
+        holder.layout.setBackgroundColor(if(position % 2 == 1) Color.LTGRAY else Color.WHITE)
         holder.tradeItemView.text = current.label + " " + current.amount.toString() +
                 "€ " + SimpleDateFormat("dd/M").format(current.date.time!!)
         holder.tradeDeleteButton.setOnClickListener {

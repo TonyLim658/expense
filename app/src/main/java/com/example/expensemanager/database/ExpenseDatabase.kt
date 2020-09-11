@@ -82,6 +82,8 @@ abstract class ExpenseDatabase : RoomDatabase() {
             val sheetId = sheetDao.insert(sheet)
             var tag = Tag(0, "Other", "", true, sheetId)
             tagDao.insert(tag)
+            tag = Tag(0, "Other", "", false, sheetId)
+            tagDao.insert(tag)
             tag = Tag(0, "Food", "", false, sheetId)
             tagDao.insert(tag)
             tag = Tag(0, "Rent", "", false, sheetId)

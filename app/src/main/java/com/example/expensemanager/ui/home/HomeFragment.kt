@@ -9,6 +9,7 @@ import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.toColorInt
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -275,22 +276,23 @@ class HomeFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer { tags ->
                 val entries: ArrayList<PieEntry> = ArrayList()
                 tags?.stream()?.forEach { tag ->
-                    entries.add(
-                        PieEntry(
+                    val entry = PieEntry(
                             tag.sum_amount.toFloat(),
-                            tag.label
-                        )
-                    )
+                            tag.label)
+                    entries.add(entry)
                 }
+
                 val ds = PieDataSet(entries, "Chart")
                 ds.setColors(*ColorTemplate.MATERIAL_COLORS)
                 ds.valueTextColor = Color.BLACK
-                ds.valueLineColor = Color.BLACK
                 ds.valueTextSize = 12f
 
                 val d = PieData(ds)
                 pieChartView.description.isEnabled = false
                 pieChartView.holeRadius = 45f
+                pieChartView.setEntryLabelColor(Color.BLACK)
+                pieChartView.setHoleColor(
+                    Color.parseColor(if(isIncome) "#0F9D58" else "#DB4437"))
                 pieChartView.transparentCircleRadius = 50f
                 pieChartView.data = d
                 pieChartView.notifyDataSetChanged()
