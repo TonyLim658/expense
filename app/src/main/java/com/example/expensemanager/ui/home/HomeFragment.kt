@@ -193,7 +193,7 @@ class HomeFragment : Fragment() {
                     Log.d("DragDrop expense layout", "DROP")
                     val item: ClipData.Item = event.clipData.getItemAt(0)
 
-                    val action = HomeFragmentDirections.actionNavigationHomeToNavigationAddTrade(false)
+                    val action = HomeFragmentDirections.actionNavigationHomeToNavigationAddTrade(0, false, "")
                     findNavController().navigate(action)
                     v.invalidate()
 
@@ -246,7 +246,7 @@ class HomeFragment : Fragment() {
                 }
                 DragEvent.ACTION_DROP -> {
                     Log.d("DragDrop income layout", "DROP")
-                    val action = HomeFragmentDirections.actionNavigationHomeToNavigationAddTrade(true)
+                    val action = HomeFragmentDirections.actionNavigationHomeToNavigationAddTrade(0, true, "")
                     findNavController().navigate(action)
                     v.invalidate()
                     true

@@ -16,12 +16,12 @@
         android:id="@+id/navigation_home"
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/title_home" />
+    <!--
 
     <item
         android:id="@+id/navigation_data"
         android:icon="@drawable/ic_pie_chart_outlined_black_24dp"
         android:title="@string/title_data" />
-    <!--
 
         <item
             android:id="@+id/navigation_settings"

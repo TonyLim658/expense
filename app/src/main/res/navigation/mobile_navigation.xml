@@ -64,10 +64,20 @@
         <action
             android:id="@+id/action_navigation_trade_to_navigation_home"
             app:destination="@id/navigation_home" />
+        <action
+            android:id="@+id/action_navigation_add_trade_to_navigation_add_note"
+            app:destination="@id/navigation_add_note"
+            app:popUpTo="@id/navigation_add_trade" />
+        <argument
+            android:name="tradeId"
+            app:argType="long" />
         <argument
             android:name="isIncome"
             app:argType="boolean"
             android:defaultValue="true" />
+        <argument
+            android:name="note"
+            app:argType="string" />
     </fragment>
 
     <fragment
@@ -82,5 +92,11 @@
             app:argType="boolean"
             android:defaultValue="true" />
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_add_note"
+        android:name="com.example.expensemanager.ui.trade.AddNoteFragment"
+        android:label="@string/title_add_note_description"
+        tools:layout="@layout/fragment_add_note" />
 
 </navigation>

@@ -14,18 +14,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/edit_tag_label"
+        android:id="@+id/edit_note"
         android:layout_width="300dp"
         android:layout_height="46dp"
         android:layout_margin="@dimen/big_padding"
         android:fontFamily="sans-serif-light"
         android:hint="@string/hint_tag_label"
-        android:inputType="textAutoComplete"
+        android:importantForAutofill="no"
+        android:inputType="textAutoComplete|textCapWords"
         android:minHeight="@dimen/min_height"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <Spinner
         android:id="@+id/spinner_tag_type"
@@ -34,7 +34,7 @@
         android:layout_marginTop="17dp"
         android:entries="@array/tag_type"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_tag_label" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_note" />
 
     <Button
         android:id="@+id/btn-add-tag"

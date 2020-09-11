@@ -3,15 +3,14 @@ package com.example.expensemanager.ui.trade
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.ColorFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -53,6 +52,7 @@ class AddTradeFragment : Fragment() {
         val txtTagTrade =  root.txt_tag_trade
         val editTxtAmount = root.edit_txt_add_trade_amount
         val editTxtLabel = root.edit_txt_add_trade_label
+        val editTxtNote: EditText = root.edit_txt_note
         val tradeTypeSpinner: Spinner = root.findViewById(R.id.spinner_trade_type)
         root.btn_select_date_trade.setOnClickListener {
             val c = Calendar.getInstance()
@@ -68,6 +68,7 @@ class AddTradeFragment : Fragment() {
         }
         root.spinner_trade_type.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
+                txtTagTrade.text = "Select a tag"
             }
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 txtTagTrade.text = "Select a tag"
@@ -118,8 +119,12 @@ class AddTradeFragment : Fragment() {
                                     tagsChecked.add(tagsTempList[i])
                                 }
                             }
-                            txtTagTrade.text = colors
-                            Log.d("AddTradeFragment", "colors = " + colors)
+                            if(colors.isNullOrEmpty()) {
+                                txtTagTrade.text = "Select a tag"
+                            } else {
+                                txtTagTrade.text = colors
+                            }
+                            Log.d("AddTradeFragment", "colors = $colors")
                         }
                         ?.setNegativeButton("Cancel",
                             DialogInterface.OnClickListener { dialog, id ->
@@ -134,7 +139,6 @@ class AddTradeFragment : Fragment() {
                     builderSingle?.setIcon(R.drawable.ic_loyalty_black_24dp)
                     builderSingle?.setTitle("Select One Name:")
                 })
-
         }
 
         root.btn_save_trade2.setOnClickListener {
@@ -143,23 +147,36 @@ class AddTradeFragment : Fragment() {
                 tagsChecked.isEmpty() -> {
                     toast.setText("Please select a tag")
                     toast.show()
-                    Log.d("TradeFragment", "Tag not selected")
+                    Log.i("TradeFragment", "Tag not selected")
+                }
+                editTxtLabel.text.toString().isNullOrBlank() -> {
+                    toast.setText("Please specify a label")
+                    toast.show()
+                    Log.i("TradeFragment", "Label not specified")
                 }
                 editTxtAmount.text.toString().isNullOrBlank() -> {
                     toast.setText("Please specify an amount")
                     toast.show()
-                    Log.d("TradeFragment", "Amount not specified")
+                    Log.i("TradeFragment", "Amount not specified")
                 }
                 else -> {
                     val amount: Double = editTxtAmount.text.toString().toDouble()
                     val label: String = editTxtLabel.text.toString()
-                    var trade = Trade(0, label, "", amount, date)
+                    val note: String = editTxtNote.text.toString()
+                    var trade = Trade(0, label, note, amount, date)
                     addTradeViewModel.insertWithTags(trade, tagsChecked)
                     val action = AddTradeFragmentDirections.actionNavigationTradeToNavigationHome()
                     findNavController().navigate(action)
                 }
             }
         }
+        /*
+        root.btn_add_note.setOnClickListener {
+            val action = AddTradeFragmentDirections.actionNavigationAddTradeToNavigationAddNote()
+            findNavController().navigate(action)
+        }
+        */
+
         return root
     }
 

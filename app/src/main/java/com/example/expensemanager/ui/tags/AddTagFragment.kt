@@ -10,8 +10,8 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.expensemanager.R
 import com.example.expensemanager.database.entity.Tag
@@ -21,7 +21,6 @@ class AddTagFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private lateinit var addTagViewModel: AddTagViewModel
     private lateinit var editTagLabelView: EditText
-
     private val INCOME_TEXT = "Income"
 
     override fun onCreateView(
@@ -29,11 +28,10 @@ class AddTagFragment : Fragment(), AdapterView.OnItemSelectedListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        addTagViewModel = ViewModelProvider(this).get(AddTagViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_add_tag, container, false)
-        editTagLabelView = root.findViewById(R.id.edit_tag_label)
+        addTagViewModel = ViewModelProvider(this).get(AddTagViewModel::class.java)
+        editTagLabelView = root.findViewById(R.id.edit_note)
         val tagSpinner: Spinner = root.findViewById(R.id.spinner_tag_type)
-        Log.d("AddTagFragment", "TAG SPINNER ID = " + R.id.spinner_tag_type)
 
         ArrayAdapter.createFromResource(
             this.context,
@@ -47,22 +45,24 @@ class AddTagFragment : Fragment(), AdapterView.OnItemSelectedListener {
             tagSpinner.onItemSelectedListener = this
         }
         root.btn_add_tag.setOnClickListener {
-            var IS_INCOME: Boolean = tagSpinner.selectedItem.toString() == INCOME_TEXT
-            Log.d("AddTagFragment", tagSpinner.selectedItem.toString())
-            var t: Tag = Tag(0, editTagLabelView.text.toString(), "", IS_INCOME)
-            addTagViewModel.insert(t)
-            val action = AddTagFragmentDirections.actionNavigationAddTagToNavigationTags()
-            findNavController().navigate(action)
+            addTagViewModel.getAllSheet().observe(viewLifecycleOwner, Observer { sheet ->
+                var IS_INCOME: Boolean = tagSpinner.selectedItem.toString() == INCOME_TEXT
+                var t = Tag(0, editTagLabelView.text.toString().trim(), "", IS_INCOME, sheet[0].id)
+                addTagViewModel.insert(t)
+                val action = AddTagFragmentDirections.actionNavigationAddTagToNavigationTags()
+                findNavController().navigate(action)
+
+            })
         }
         return root
     }
 
-    override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
-        val selectedItem: String = parent.getItemAtPosition(pos).toString()
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
+        val selectedItem: String = parent?.getItemAtPosition(pos).toString()
         Log.d("AddTagFragment", "$selectedItem selected in spinner")
     }
 
-    override fun onNothingSelected(parent: AdapterView<*>) {
+    override fun onNothingSelected(parent: AdapterView<*>?) {
         // Another interface callback
         Log.d("AddTagFragment", "Nothing selected in spinner")
     }

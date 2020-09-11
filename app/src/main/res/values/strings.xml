@@ -28,6 +28,8 @@
     <string name="select_a_tag">Select a tag</string>
     <string name="note_headline">Note</string>
     <string name="add_note">Add a note</string>
+    <string name="hint_note">Put your note</string>
+    <string name="title_add_note_description">Add your note</string>
 
     <string-array name="tag_type">
         <item>@string/text_income</item>

@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="text"
+                android:inputType="text|textCapWords"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -74,7 +74,7 @@
                 android:layout_marginTop="16dp"
                 android:text="Amount"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edit-txt-add-trade-label" />
+                app:layout_constraintTop_toBottomOf="@+id/edit-txt-add-trade-label" />
 
             <EditText
                 android:id="@+id/edit-txt-add-trade-amount"
@@ -169,6 +169,7 @@
                     android:id="@+id/btn-add-note"
                     android:layout_width="@android:dimen/app_icon_size"
                     android:layout_height="@android:dimen/app_icon_size"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     android:background="@color/transparency"
                     app:layout_constraintStart_toStartOf="parent"
@@ -180,9 +181,12 @@
                     style="@style/AddTradeNotMandatoryInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
                     android:text="@string/note_headline"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn-add-note"
                     app:layout_constraintStart_toEndOf="@+id/btn-add-note"
                     app:layout_constraintTop_toTopOf="@+id/btn-add-note" />
+<!--
 
                 <TextView
                     android:id="@+id/txt-add-trade-note"
@@ -192,6 +196,19 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/btn-add-note"
                     app:layout_constraintTop_toBottomOf="@+id/txt-note-headline" />
+-->
+
+                <EditText
+                    android:id="@+id/edit-txt-note"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:ems="10"
+                    android:hint="@string/add_note"
+                    android:inputType="textLongMessage|text|textCapWords"
+                    app:layout_constraintStart_toEndOf="@+id/btn-add-note"
+                    app:layout_constraintStart_toStartOf="@+id/btn-add-note"
+                    app:layout_constraintTop_toBottomOf="@+id/btn-add-note" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
