@@ -43,10 +43,6 @@ class AddTradeFragment : Fragment() {
         if (!isIncome) {
             root.spinner_trade_type.setSelection(1)
         }
-        val arrayAdapter = ArrayAdapter<Tag>(
-            this.context,
-            android.R.layout.select_dialog_singlechoice
-        )
         val txtDateTrade = root.txt_date_trade
         txtDateTrade.text = SimpleDateFormat("dd/M/yyyy").format(date.time!!)
         val txtTagTrade =  root.txt_tag_trade
@@ -59,11 +55,11 @@ class AddTradeFragment : Fragment() {
             val year = c.get(Calendar.YEAR)
             val month = c.get(Calendar.MONTH)
             val day = c.get(Calendar.DAY_OF_MONTH)
-            val dpd = DatePickerDialog(activity, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            val dpd = DatePickerDialog(this.context!!, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                 c.set(year, monthOfYear, dayOfMonth)
                 date = Date(c.time.time)
                 txtDateTrade.text = SimpleDateFormat("dd/M/yyyy").format(date)
-            }, year, month, day)
+            }, year, month, day)!!
             dpd.show()
         }
         root.spinner_trade_type.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

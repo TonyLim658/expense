@@ -34,7 +34,7 @@ class AddTagFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val tagSpinner: Spinner = root.findViewById(R.id.spinner_tag_type)
 
         ArrayAdapter.createFromResource(
-            this.context,
+            this.context!!,
             R.array.tag_type,
             android.R.layout.simple_spinner_item
         ).also { adapter ->
